@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpiceShop - Customer</title>
+    <style>
+        :root {
+            --font-size: 14px;
+            --background: #badea1;
+            --foreground: #030213;
+            --card: #eab14f;
+            --card-foreground: #030213;
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --secondary: #f3f3f5;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --destructive: #d4183d;
+            --destructive-foreground: #ffffff;
+            border: rgba(0, 0, 0, 0.1);
+            --input-background: #ffffff;
+            --radius: 0.625rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: var(--font-size);
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-1 { flex: 1; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        
+        .p-0 { padding: 0; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .p-12 { padding: 3rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .pl-10 { padding-left: 2.5rem; }
+        
+        .m-2 { margin: 0.5rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mx-8 { margin-left: 2rem; margin-right: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        
+        .w-full { width: 100%; }
+        .w-4 { width: 1rem; }
+        .w-5 { width: 1.25rem; }
+        .w-8 { width: 2rem; }
+        .w-10 { width: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .w-16 { width: 4rem; }
+        .w-48 { width: 12rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-lg { max-width: 32rem; }
+        .max-w-7xl { max-width: 80rem; }
+        
+        .h-4 { height: 1rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-10 { height: 2.5rem; }
+        .h-12 { height: 3rem; }
+        .h-16 { height: 4rem; }
+        .h-full { height: 100%; }
+        .min-h-screen { min-height: 100vh; }
+        
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        
+        .text-primary { color: var(--primary); }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .text-destructive { color: var(--destructive); }
+        .text-green-600 { color: #16a34a; }
+        .text-green-800 { color: #166534; }
+        .text-blue-800 { color: #1e40af; }
+        .text-orange-600 { color: #ea580c; }
+        .text-yellow-400 { color: #facc15; }
+        .text-gray-300 { color: #d1d5db; }
+        
+        .bg-background { background-color: var(--background); }
+        .bg-white { background-color: #ffffff; }
+        .bg-muted { background-color: var(--muted); }
+        .bg-primary { background-color: var(--primary); }
+        .bg-secondary { background-color: var(--secondary); }
+        .bg-destructive { background-color: var(--destructive); }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        
+        .border { border: 1px solid var(--border); }
+        .border-b { border-bottom: 1px solid var(--border); }
+        .border-t { border-top: 1px solid var(--border); }
+        .border-x { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .border-blue-200 { border-color: #bfdbfe; }
+        
+        .rounded { border-radius: 0.25rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        
+        .sticky { position: sticky; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .top-0 { top: 0; }
+        .top-2 { top: 0.5rem; }
+        .top-1\/2 { top: 50%; }
+        .left-2 { left: 0.5rem; }
+        .left-3 { left: 0.75rem; }
+        .-top-2 { top: -0.5rem; }
+        .-right-2 { right: -0.5rem; }
+        .z-50 { z-index: 50; }
+        
+        .transform { transform: translateZ(0); }
+        .-translate-y-1\/2 { transform: translateY(-50%); }
+        
+        .transition-colors { transition: color 0.15s ease-in-out; }
+        .transition-transform { transition: transform 0.15s ease-in-out; }
+        .transition-shadow { transition: box-shadow 0.15s ease-in-out; }
+        .duration-300 { transition-duration: 300ms; }
+        
+        .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .hover\:text-primary:hover { color: var(--primary); }
+        .hover\:bg-secondary:hover { background-color: var(--secondary); }
+        .hover\:scale-105:hover { transform: scale(1.05); }
+        
+        .cursor-pointer { cursor: pointer; }
+        .line-through { text-decoration: line-through; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .overflow-hidden { overflow: hidden; }
+        .object-cover { object-fit: cover; }
+        
+        /* Custom Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1a1625;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+        
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--foreground);
+        }
+        
+        .btn-ghost:hover {
+            background-color: var(--accent);
+        }
+        
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .input {
+            display: flex;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--input-background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            outline: none;
+        }
+        
+        .input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(3, 2, 19, 0.1);
+        }
+        
+        .textarea {
+            min-height: 4rem;
+            resize: vertical;
+        }
+        
+        .select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-default {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+        
+        .badge-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+        
+        .badge-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+        
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+        
+        .separator {
+            height: 1px;
+            background-color: var(--border);
+            width: 100%;
+        }
+        
+        .aspect-square {
+            aspect-ratio: 1 / 1;
+        }
+        
+        .star {
+            fill: currentColor;
+        }
+        
+        .star-filled {
+            color: #facc15;
+        }
+        
+        .star-empty {
+            color: #d1d5db;
+        }
+        
+        /* Icons */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        /* Responsive */
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:flex-row { flex-direction: row; }
+            .sm\:items-center { align-items: center; }
+            .sm\:justify-between { justify-content: space-between; }
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:col-span-2 { grid-column: span 2 / span 2; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+        }
+        
+        @media (min-width: 1280px) {
+            .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        
+        /* Tabs */
+        .tabs {
+            width: 100%;
+        }
+        
+        .tabs-list {
+            display: inline-flex;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            background-color: var(--muted);
+            padding: 0.25rem;
+        }
+        
+        .tabs-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        
+        .tabs-trigger.active {
+            background-color: var(--background);
+            color: var(--foreground);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        
+        .tabs-content {
+            margin-top: 0.5rem;
+            outline: none;
+        }
+        
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .table th {
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            background-color: var(--background);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            max-width: 28rem;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--muted);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Timeline for Tracking */
+        .timeline {
+            position: relative;
+            padding: 1rem 0 0 1rem;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--muted);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 4px;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: var(--muted);
+            border: 2px solid var(--background);
+            z-index: 1;
+        }
+
+        .timeline-item.completed:before {
+            background-color: #16a34a; /* green-600 */
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen bg-background">
+        <!-- Login Modal - Now accessible only when needed -->
+        <div id="login-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Login to SpiceShop</h3>
+                    <button class="btn btn-ghost text-xl" onclick="hideLoginModal()">×</button>
+                </div>
+                <div class="tabs">
+                    <div class="tabs-list w-full grid grid-cols-2 mb-4">
+                        <button class="tabs-trigger active" onclick="switchLoginTab('login')">Login</button>
+                        <button class="tabs-trigger" onclick="switchLoginTab('signup')">Sign Up</button>
+                    </div>
+
+                    <div id="login-tab" class="tabs-content">
+                        <form id="login-form" class="space-y-4">
+                            <div>
+                                <label for="login-email" class="block text-sm font-medium mb-2">Email</label>
+                                <input type="email" id="login-email" class="input" placeholder="your@email.com" required>
+                            </div>
+                            <div>
+                                <label for="login-password" class="block text-sm font-medium mb-2">Password</label>
+                                <input type="password" id="login-password" class="input" placeholder="••••••••" required>
+                            </div>
+                            <div class="space-y-3">
+                                <button type="submit" class="btn btn-primary w-full">
+                                    🛒 Login as Customer
+                                </button>
+                                <a href="merchant.html" class="btn btn-secondary w-full text-center">
+                                    🏪 Go to Merchant Login
+                                </a>
+                            </div>
+                        </form>
+                        <div class="text-center text-sm text-muted-foreground mt-4">
+                             CREATED BY ERROR!
+                        </div>
+                    </div>
+
+                    <div id="signup-tab" class="tabs-content hidden">
+                        <form id="signup-form" class="space-y-4">
+                            <div>
+                                <label for="signup-name" class="block text-sm font-medium mb-2">Full Name</label>
+                                <input type="text" id="signup-name" class="input" placeholder="John Doe" required>
+                            </div>
+                            <div>
+                                <label for="signup-email" class="block text-sm font-medium mb-2">Email</label>
+                                <input type="email" id="signup-email" class="input" placeholder="your@email.com" required>
+                            </div>
+                            <div>
+                                <label for="signup-password" class="block text-sm font-medium mb-2">Password</label>
+                                <input type="password" id="signup-password" class="input" placeholder="••••••••" required>
+                            </div>
+                            <div>
+                                <label for="signup-confirm" class="block text-sm font-medium mb-2">Confirm Password</label>
+                                <input type="password" id="signup-confirm" class="input" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-full">Create Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <header id="app-header" class="bg-white border-b sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-primary cursor-pointer" onclick="goToHome()">SpiceShop</h1>
+                    </div>
+
+                    <div id="search-bar" class="flex-1 max-w-lg mx-8">
+                        <div class="relative">
+                            <input type="text" id="search-input" class="input pl-10" placeholder="Search spices..." onkeyup="searchProducts()">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <button id="nav-products" class="btn btn-primary" onclick="showPage('catalog')">Products</button>
+                        <button id="nav-history" class="btn btn-ghost" onclick="showPage('history')">Order History</button>
+                        <button id="nav-cart" class="btn btn-ghost relative" onclick="showPage('cart')">
+                            🛒 Cart
+                            <span id="cart-badge" class="absolute -top-2 -right-2 h-5 w-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center text-xs hidden">0</span>
+                        </button>
+                        <button id="login-btn" class="btn btn-ghost" onclick="showLoginModal()">
+                            👤 Login
+                        </button>
+                        <button id="logout-btn" class="btn btn-ghost hidden" onclick="logout()">
+                            👤 Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div id="catalog-page">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold mb-2">Premium Spices Collection</h1>
+                        <p class="text-muted-foreground">Discover our curated selection of high-quality spices from around the world</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <select id="category-filter" class="input select w-48" onchange="filterProducts()">
+                            <option value="all">All Categories</option>
+                            <option value="Powder">Powder</option>
+                            <option value="Whole Spices">Whole Spices</option>
+                            <option value="Blends">Blends</option>
+                            <option value="Seeds">Seeds</option>
+                        </select>
+                        <select id="sort-by" class="input select w-48" onchange="sortProducts()">
+                            <option value="name">Name A-Z</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Highest Rated</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+            </div>
+
+            <div id="product-detail-page" class="hidden">
+                <button class="btn btn-ghost p-0 mb-6" onclick="showPage('catalog')">
+                    ← Back to Products
+                </button>
+                <div id="product-detail-content"></div>
+            </div>
+
+            <div id="cart-page" class="hidden">
+                <button class="btn btn-ghost p-0 mb-6" onclick="showPage('catalog')">
+                    ← Back to Products
+                </button>
+                <div id="cart-content"></div>
+            </div>
+
+            <div id="history-page" class="hidden">
+                <h1 class="text-2xl font-bold mb-6">Order History</h1>
+                <div id="orders-list" class="space-y-4"></div>
+            </div>
+        </main>
+
+        <div id="booking-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Book Your Order</h3>
+                    <button class="btn btn-ghost text-xl" onclick="hideBookingModal()">×</button>
+                </div>
+                <form id="booking-form" class="space-y-4">
+                    <div>
+                        <label for="booking-name" class="block text-sm font-medium mb-2">Full Name</label>
+                        <input type="text" id="booking-name" class="input" required>
+                    </div>
+                    <div>
+                        <label for="booking-phone" class="block text-sm font-medium mb-2">Phone Number</label>
+                        <input type="tel" id="booking-phone" class="input" required>
+                    </div>
+                    <div>
+                        <label for="booking-address" class="block text-sm font-medium mb-2">Shipping Address</label>
+                        <textarea id="booking-address" class="input textarea" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="tracking-modal" class="modal hidden">
+            <div class="modal-content max-w-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Order Tracking</h3>
+                    <button class="btn btn-ghost text-xl" onclick="hideTrackingModal()">×</button>
+                </div>
+                <div id="tracking-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="app-footer" class="bg-primary text-primary-foreground py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">SpiceShop</h4>
+                    <p class="text-sm text-muted-foreground">Premium spices delivered to your doorstep.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-muted-foreground hover:underline">About Us</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:underline">Contact</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:underline">Privacy Policy</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:underline">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-muted-foreground hover:underline">Facebook</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:underline">Instagram</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:underline">Twitter</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li>123 Spice Lane, Flavor Town, ST 12345</li>
+                        <li>(123) 456-7890</li>
+                        <li>support@spiceshop.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-xs text-muted-foreground mt-8 border-t border-muted pt-4">
+                &copy; 2025 SpiceShop. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Default Data
+        const defaultProducts = [
+            {
+                id: '1',
+                name: 'Organic Turmeric Powder',
+                price: 12.99,
+                originalPrice: 15.99,
+                rating: 4.8,
+                reviews: 124,
+                image: 'https://images.unsplash.com/photo-1698556735172-1b5b3cd9d2ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0dXJtZXJpYyUyMHBvd2RlciUyMHNwaWNlfGVufDF8fHx8MTc1NTQxODU1Nnww&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Powder',
+                origin: 'India',
+                weight: '100g',
+                inStock: true,
+                stockCount: 45,
+                isOrganic: true,
+                description: 'Premium organic turmeric powder with high curcumin content. Sourced directly from farms in Kerala, India.',
+                sales: 124
+            },
+            {
+                id: '2',
+                name: 'Ceylon Cinnamon Sticks',
+                price: 18.50,
+                rating: 4.9,
+                reviews: 89,
+                image: 'https://images.unsplash.com/photo-1622798337764-259682f03741?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxjaW5uYW1vbiUyMHN0aWNrcyUyMHNwaWNlfGVufDF8fHx8MTc1NTQxODU1N3ww&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Whole Spices',
+                origin: 'Sri Lanka',
+                weight: '50g',
+                inStock: true,
+                stockCount: 28,
+                description: 'Authentic Ceylon cinnamon sticks with sweet, delicate flavor.',
+                sales: 89
+            },
+            {
+                id: '3',
+                name: 'Black Peppercorns',
+                price: 9.75,
+                rating: 4.7,
+                reviews: 203,
+                image: 'https://images.unsplash.com/photo-1649952052743-5e8f37c348c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxibGFjayUyMHBlcHBlciUyMHNwaWNlfGVufDF8fHx8MTc1NTQ4ODc5NXww&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Whole Spices',
+                origin: 'Vietnam',
+                weight: '75g',
+                inStock: true,
+                stockCount: 67,
+                description: 'Premium black peppercorns with intense heat and aroma.',
+                sales: 203
+            },
+            {
+                id: '4',
+                name: 'Paprika Powder',
+                price: 7.25,
+                originalPrice: 9.99,
+                rating: 4.5,
+                reviews: 67,
+                image: 'https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxzcGljZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTU0MTg1NTd8MA&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Powder',
+                origin: 'Spain',
+                weight: '100g',
+                inStock: true,
+                stockCount: 34,
+                description: 'Sweet Spanish paprika with vibrant red color.',
+                sales: 67
+            },
+            {
+                id: '5',
+                name: 'Cumin Seeds',
+                price: 6.99,
+                rating: 4.6,
+                reviews: 98,
+                image: 'https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxzcGljZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTU0MTg1NTd8MA&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Seeds',
+                origin: 'India',
+                weight: '100g',
+                inStock: true,
+                stockCount: 52,
+                description: 'Aromatic cumin seeds for authentic Indian cuisine.',
+                sales: 98
+            },
+            {
+                id: '6',
+                name: 'Garam Masala',
+                price: 11.25,
+                rating: 4.8,
+                reviews: 156,
+                image: 'https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=tinysrgb&fit-max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxzcGljZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTU0MTg1NTd8MA&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Blends',
+                origin: 'India',
+                weight: '80g',
+                inStock: true,
+                stockCount: 41,
+                description: 'Traditional North Indian spice blend with 12 spices.',
+                sales: 156
+            },
+            {
+                id: '7',
+                name: 'Cardamom Pods',
+                price: 22.99,
+                rating: 4.9,
+                reviews: 73,
+                image: 'https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxzcGljZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTU0MTg1NTd8MA&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Whole Spices',
+                origin: 'Guatemala',
+                weight: '40g',
+                inStock: true,
+                stockCount: 19,
+                description: 'Green cardamom pods with intense floral aroma.',
+                sales: 73
+            },
+            {
+                id: '8',
+                name: 'Chili Flakes',
+                price: 5.50,
+                rating: 4.4,
+                reviews: 45,
+                image: 'https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxzcGljZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTU0MTg1NTd8MA&ixlib=rb-4.1.0&q=80&w=400',
+                category: 'Powder',
+                origin: 'Mexico',
+                weight: '60g',
+                inStock: true,
+                stockCount: 78,
+                description: 'Crushed red chili flakes for extra heat.',
+                sales: 45
+            }
+        ];
+
+        // State Management
+        let products = [...defaultProducts];
+        let cart = JSON.parse(localStorage.getItem('spiceshop-cart')) || [];
+        let user = JSON.parse(localStorage.getItem('spiceshop-user')) || null;
+        let orders = JSON.parse(localStorage.getItem('spiceshop-orders')) || [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartBadge();
+            updateUserInterface();
+        });
+
+        // User Management
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function hideLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function switchLoginTab(tab) {
+            document.querySelectorAll('.tabs-trigger').forEach(trigger => {
+                trigger.classList.remove('active');
+            });
+            
+            document.getElementById('login-tab').classList.add('hidden');
+            document.getElementById('signup-tab').classList.add('hidden');
+            
+            if (tab === 'login') {
+                document.querySelector('.tabs-trigger:first-child').classList.add('active');
+                document.getElementById('login-tab').classList.remove('hidden');
+            } else {
+                document.querySelector('.tabs-trigger:last-child').classList.add('active');
+                document.getElementById('signup-tab').classList.remove('hidden');
+            }
+        }
+
+        function login(email, password) {
+            // Simple login simulation
+            user = {
+                id: '1',
+                name: 'John Doe',
+                email: email
+            };
+            localStorage.setItem('spiceshop-user', JSON.stringify(user));
+            updateUserInterface();
+            hideLoginModal();
+        }
+
+        function logout() {
+            user = null;
+            localStorage.removeItem('spiceshop-user');
+            updateUserInterface();
+        }
+
+        function updateUserInterface() {
+            if (user) {
+                document.getElementById('login-btn').classList.add('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('login-btn').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.add('hidden');
+            }
+        }
+
+        // Product Management
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = createProductCard(product);
+                grid.appendChild(productCard);
+            });
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'card cursor-pointer transition-transform hover:scale-105';
+            card.onclick = () => showProductDetail(product.id);
+            
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    ${product.isOrganic ? '<span class="absolute top-2 left-2 badge badge-default text-xs">🌱 Organic</span>' : ''}
+                    ${product.originalPrice ? '<span class="absolute top-2 right-2 badge badge-destructive text-xs">Sale</span>' : ''}
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold text-lg truncate flex-1 mr-2">${product.name}</h3>
+                        <span class="text-sm text-muted-foreground">${product.weight}</span>
+                    </div>
+                    <p class="text-sm text-muted-foreground mb-2">${product.origin}</p>
+                    <div class="flex items-center mb-3">
+                        <div class="flex mr-2">
+                            ${renderStars(product.rating)}
+                        </div>
+                        <span class="text-sm text-muted-foreground">(${product.reviews})</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl font-bold">$${product.price}</span>
+                            ${product.originalPrice ? `<span class="text-sm text-muted-foreground line-through">$${product.originalPrice}</span>` : ''}
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCart('${product.id}')">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<span class="star star-filled">★</span>';
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    stars += '<span class="star star-filled">★</span>';
+                } else {
+                    stars += '<span class="star star-empty">★</span>';
+                }
+            }
+            return stars;
+        }
+
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            document.getElementById('catalog-page').classList.add('hidden');
+            document.getElementById('product-detail-page').classList.remove('hidden');
+            
+            const content = document.getElementById('product-detail-content');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <img src="${product.image}" alt="${product.name}" class="w-full rounded-lg">
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold mb-4">${product.name}</h1>
+                        <div class="flex items-center mb-4">
+                            <div class="flex mr-3">
+                                ${renderStars(product.rating)}
+                            </div>
+                            <span class="text-muted-foreground">${product.rating} (${product.reviews} reviews)</span>
+                        </div>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center">
+                                <span class="font-medium w-24">Category:</span>
+                                <span class="text-muted-foreground">${product.category}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-medium w-24">Origin:</span>
+                                <span class="text-muted-foreground">${product.origin}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-medium w-24">Weight:</span>
+                                <span class="text-muted-foreground">${product.weight}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="font-medium w-24">In Stock:</span>
+                                <span class="text-green-600 font-medium">${product.inStock ? 'Yes' : 'No'}</span>
+                            </div>
+                        </div>
+                        <p class="text-muted-foreground mb-6">${product.description}</p>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <span class="text-3xl font-bold">$${product.price}</span>
+                                ${product.originalPrice ? `<span class="text-xl text-muted-foreground line-through">$${product.originalPrice}</span>` : ''}
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="btn btn-primary btn-lg" onclick="addToCart('${product.id}')">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Cart Management
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('spiceshop-cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function showPage(page) {
+            // Hide all pages
+            document.getElementById('catalog-page').classList.add('hidden');
+            document.getElementById('product-detail-page').classList.add('hidden');
+            document.getElementById('cart-page').classList.add('hidden');
+            document.getElementById('history-page').classList.add('hidden');
+            
+            // Show selected page
+            document.getElementById(`${page}-page`).classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('#app-header button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-ghost');
+            });
+            
+            document.getElementById(`nav-${page}`).classList.remove('btn-ghost');
+            document.getElementById(`nav-${page}`).classList.add('btn-primary');
+            
+            // Render page content if needed
+            if (page === 'cart') {
+                renderCart();
+            } else if (page === 'history') {
+                renderOrderHistory();
+            }
+        }
+
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-12">
+                        <h2 class="text-2xl font-bold mb-4">Your cart is empty</h2>
+                        <p class="text-muted-foreground mb-6">Add some delicious spices to get started!</p>
+                        <button class="btn btn-primary" onclick="showPage('catalog')">Browse Products</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <h1 class="text-2xl font-bold mb-6">Shopping Cart</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-4">
+            `;
+            
+            cart.forEach(item => {
+                html += `
+                    <div class="card p-4">
+                        <div class="flex items-center gap-4">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                            <div class="flex-1">
+                                <h3 class="font-semibold">${item.name}</h3>
+                                <p class="text-sm text-muted-foreground">${item.weight} • ${item.origin}</p>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="flex items-center gap-2">
+                                        <button class="btn btn-ghost btn-sm" onclick="updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                                        <span class="w-8 text-center">${item.quantity}</span>
+                                        <button class="btn btn-ghost btn-sm" onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <span class="font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
+                                        <button class="btn btn-ghost btn-sm text-destructive" onclick="removeFromCart('${item.id}')">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 4.99;
+            const tax = subtotal * 0.08;
+            const total = subtotal + shipping + tax;
+            
+            html += `
+                    </div>
+                    <div>
+                        <div class="card p-6">
+                            <h3 class="font-semibold mb-4">Order Summary</h3>
+                            <div class="space-y-3 mb-4">
+                                <div class="flex justify-between">
+                                    <span>Subtotal</span>
+                                    <span>$${subtotal.toFixed(2)}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Shipping</span>
+                                    <span>$${shipping.toFixed(2)}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Tax</span>
+                                    <span>$${tax.toFixed(2)}</span>
+                                </div>
+                            </div>
+                            <div class="separator mb-4"></div>
+                            <div class="flex justify-between font-semibold text-lg mb-6">
+                                <span>Total</span>
+                                <span>$${total.toFixed(2)}</span>
+                            </div>
+                            <button class="btn btn-primary w-full" onclick="showBookingModal()">Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                localStorage.setItem('spiceshop-cart', JSON.stringify(cart));
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('spiceshop-cart', JSON.stringify(cart));
+            renderCart();
+            updateCartBadge();
+        }
+
+        // Search and Filter
+        function searchProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            products = defaultProducts.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm) ||
+                product.origin.toLowerCase().includes(searchTerm)
+            );
+            renderProducts();
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('category-filter').value;
+            if (category === 'all') {
+                products = [...defaultProducts];
+            } else {
+                products = defaultProducts.filter(product => product.category === category);
+            }
+            renderProducts();
+        }
+
+        function sortProducts() {
+            const sortBy = document.getElementById('sort-by').value;
+            
+            switch (sortBy) {
+                case 'name':
+                    products.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'price-low':
+                    products.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    products.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    products.sort((a, b) => b.rating - a.rating);
+                    break;
+            }
+            
+            renderProducts();
+        }
+
+        // Order Management
+        function showBookingModal() {
+            if (!user) {
+                showLoginModal();
+                return;
+            }
+            document.getElementById('booking-modal').classList.remove('hidden');
+        }
+
+        function hideBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function placeOrder(formData) {
+            const order = {
+                id: Date.now().toString(),
+                date: new Date().toISOString(),
+                items: [...cart],
+                status: 'confirmed',
+                trackingNumber: 'TRK' + Date.now(),
+                customer: formData,
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 4.99
+            };
+            
+            orders.unshift(order);
+            localStorage.setItem('spiceshop-orders', JSON.stringify(orders));
+            
+            // Clear cart
+            cart = [];
+            localStorage.setItem('spiceshop-cart', JSON.stringify(cart));
+            updateCartBadge();
+            
+            hideBookingModal();
+            showPage('history');
+        }
+
+        function renderOrderHistory() {
+            const ordersList = document.getElementById('orders-list');
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="text-center py-12">
+                        <h2 class="text-2xl font-bold mb-4">No orders yet</h2>
+                        <p class="text-muted-foreground mb-6">Your order history will appear here</p>
+                        <button class="btn btn-primary" onclick="showPage('catalog')">Start Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            ordersList.innerHTML = orders.map(order => `
+                <div class="card p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                        <div>
+                            <h3 class="font-semibold">Order #${order.trackingNumber}</h3>
+                            <p class="text-sm text-muted-foreground">${new Date(order.date).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="badge ${getStatusBadgeClass(order.status)}">${order.status}</span>
+                            <span class="font-semibold">$${order.total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-4">
+                        ${order.items.slice(0, 2).map(item => `
+                            <div class="flex items-center gap-3">
+                                <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-cover rounded">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">${item.name}</p>
+                                    <p class="text-xs text-muted-foreground">Qty: ${item.quantity} • $${item.price}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                        ${order.items.length > 2 ? `<p class="text-sm text-muted-foreground">+${order.items.length - 2} more items</p>` : ''}
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn btn-secondary btn-sm" onclick="viewOrderDetails('${order.id}')">View Details</button>
+                        <button class="btn btn-ghost btn-sm" onclick="trackOrder('${order.id}')">Track Order</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'confirmed': return 'badge-secondary';
+                case 'shipped': return 'badge-default';
+                case 'delivered': return 'badge-outline';
+                default: return 'badge-secondary';
+            }
+        }
+
+        function trackOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            document.getElementById('tracking-modal').classList.remove('hidden');
+            
+            const trackingContent = document.getElementById('tracking-content');
+            trackingContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="text-center mb-6">
+                        <h4 class="font-semibold">Order #${order.trackingNumber}</h4>
+                        <p class="text-sm text-muted-foreground">Placed on ${new Date(order.date).toLocaleDateString()}</p>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <div class="text-sm font-medium">Order Confirmed</div>
+                            <div class="text-xs text-muted-foreground">${new Date(order.date).toLocaleDateString()}</div>
+                        </div>
+                        <div class="timeline-item ${order.status === 'shipped' || order.status === 'delivered' ? 'completed' : ''}">
+                            <div class="text-sm font-medium">Order Shipped</div>
+                            <div class="text-xs text-muted-foreground">${order.status === 'shipped' || order.status === 'delivered' ? 'Shipped on ' + new Date(Date.now() - 86400000).toLocaleDateString() : 'Estimated: Tomorrow'}</div>
+                        </div>
+                        <div class="timeline-item ${order.status === 'delivered' ? 'completed' : ''}">
+                            <div class="text-sm font-medium">Out for Delivery</div>
+                            <div class="text-xs text-muted-foreground">${order.status === 'delivered' ? 'Delivered on ' + new Date(Date.now() - 43200000).toLocaleDateString() : 'Estimated: In 2 days'}</div>
+                        </div>
+                        <div class="timeline-item ${order.status === 'delivered' ? 'completed' : ''}">
+                            <div class="text-sm font-medium">Delivered</div>
+                            <div class="text-xs text-muted-foreground">${order.status === 'delivered' ? 'Delivered on ' + new Date(Date.now() - 43200000).toLocaleDateString() : 'Estimated: In 3 days'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function hideTrackingModal() {
+            document.getElementById('tracking-modal').classList.add('hidden');
+        }
+
+        function goToHome() {
+            showPage('catalog');
+        }
+
+        // Event Listeners
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            login(email, password);
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            // Simple signup simulation
+            login(email, password);
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('booking-name').value,
+                phone: document.getElementById('booking-phone').value,
+                address: document.getElementById('booking-address').value
+            };
+            placeOrder(formData);
+        });
+    </script>
+</body>
+</html>
