@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpiceShop - Admin Panel</title>
+    <style>
+        /* [COPY/PASTE ALL CSS FROM MERCHANT PAGE HERE] */
+        :root {
+            --font-size: 14px;
+            --background: #ffffff;
+            --foreground: #030213;
+            --card: #ffffff;
+            --card-foreground: #030213;
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --secondary: #f3f3f5;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --destructive: #d4183d;
+            --destructive-foreground: #ffffff;
+            border: rgba(0, 0, 0, 0.1);
+            --input-background: #f3f3f5;
+            --radius: 0.625rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: var(--font-size);
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-1 { flex: 1; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        
+        .p-0 { padding: 0; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .p-12 { padding: 3rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .pl-10 { padding-left: 2.5rem; }
+        
+        .m-2 { margin: 0.5rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mx-8 { margin-left: 2rem; margin-right: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        
+        .w-full { width: 100%; }
+        .w-4 { width: 1rem; }
+        .w-5 { width: 1.25rem; }
+        .w-8 { width: 2rem; }
+        .w-10 { width: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .w-16 { width: 4rem; }
+        .w-48 { width: 12rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-lg { max-width: 32rem; }
+        .max-w-7xl { max-width: 80rem; }
+        
+        .h-4 { height: 1rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-10 { height: 2.5rem; }
+        .h-12 { height: 3rem; }
+        .h-16 { height: 4rem; }
+        .h-full { height: 100%; }
+        .min-h-screen { min-height: 100vh; }
+        
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        
+        .text-primary { color: var(--primary); }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .text-destructive { color: var(--destructive); }
+        .text-green-600 { color: #16a34a; }
+        .text-green-800 { color: #166534; }
+        .text-blue-800 { color: #1e40af; }
+        .text-orange-600 { color: #ea580c; }
+        .text-yellow-400 { color: #facc15; }
+        .text-gray-300 { color: #d1d5db; }
+        
+        .bg-background { background-color: var(--background); }
+        .bg-white { background-color: #ffffff; }
+        .bg-muted { background-color: var(--muted); }
+        .bg-primary { background-color: var(--primary); }
+        .bg-secondary { background-color: var(--secondary); }
+        .bg-destructive { background-color: var(--destructive); }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        
+        .border { border: 1px solid var(--border); }
+        .border-b { border-bottom: 1px solid var(--border); }
+        .border-t { border-top: 1px solid var(--border); }
+        .border-x { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .border-blue-200 { border-color: #bfdbfe; }
+        
+        .rounded { border-radius: 0.25rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        
+        .sticky { position: sticky; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .top-0 { top: 0; }
+        .top-2 { top: 0.5rem; }
+        .top-1\/2 { top: 50%; }
+        .left-2 { left: 0.5rem; }
+        .left-3 { left: 0.75rem; }
+        .-top-2 { top: -0.5rem; }
+        .-right-2 { right: -0.5rem; }
+        .z-50 { z-index: 50; }
+        
+        .transform { transform: translateZ(0); }
+        .-translate-y-1\/2 { transform: translateY(-50%); }
+        
+        .transition-colors { transition: color 0.15s ease-in-out; }
+        .transition-transform { transition: transform 0.15s ease-in-out; }
+        .transition-shadow { transition: box-shadow 0.15s ease-in-out; }
+        .duration-300 { transition-duration: 300ms; }
+        
+        .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .hover\:text-primary:hover { color: var(--primary); }
+        .hover\:bg-secondary:hover { background-color: var(--secondary); }
+        .hover\:scale-105:hover { transform: scale(1.05); }
+        
+        .cursor-pointer { cursor: pointer; }
+        .line-through { text-decoration: line-through; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .overflow-hidden { overflow: hidden; }
+        .object-cover { object-fit: cover; }
+        
+        /* Custom Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1a1625;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+        
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--foreground);
+        }
+        
+        .btn-ghost:hover {
+            background-color: var(--accent);
+        }
+        
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .input {
+            display: flex;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--input-background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            outline: none;
+        }
+        
+        .input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(3, 2, 19, 0.1);
+        }
+        
+        .textarea {
+            min-height: 4rem;
+            resize: vertical;
+        }
+        
+        .select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-default {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+        
+        .badge-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+        
+        .badge-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+        
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+        
+        .separator {
+            height: 1px;
+            background-color: var(--border);
+            width: 100%;
+        }
+        
+        .aspect-square {
+            aspect-ratio: 1 / 1;
+        }
+        
+        .star {
+            fill: currentColor;
+        }
+        
+        .star-filled {
+            color: #facc15;
+        }
+        
+        .star-empty {
+            color: #d1d5db;
+        }
+        
+        /* Icons */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        /* Responsive */
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:flex-row { flex-direction: row; }
+            .sm\:items-center { align-items: center; }
+            .sm\:justify-between { justify-content: space-between; }
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:col-span-2 { grid-column: span 2 / span 2; }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+        }
+        
+        @media (min-width: 1280px) {
+            .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        
+        /* Tabs */
+        .tabs {
+            width: 100%;
+        }
+        
+        .tabs-list {
+            display: inline-flex;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            background-color: var(--muted);
+            padding: 0.25rem;
+        }
+        
+        .tabs-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        
+        .tabs-trigger.active {
+            background-color: var(--background);
+            color: var(--foreground);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        
+        .tabs-content {
+            margin-top: 0.5rem;
+            outline: none;
+        }
+        
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .table th {
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .modal-content {
+            background-color: var(--background);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            max-width: 28rem;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--muted);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Timeline for Tracking */
+        .timeline {
+            position: relative;
+            padding: 1rem 0 0 1rem;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--muted);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 4px;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: var(--muted);
+            border: 2px solid var(--background);
+            z-index: 1;
+        }
+
+        .timeline-item.completed:before {
+            background-color: #16a34a; /* green-600 */
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen bg-background">
+        <div id="admin-login-page" class="min-h-screen flex items-center justify-center bg-muted">
+            <div class="w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-primary mb-2">SpiceShop Admin</h1>
+                    <p class="text-muted-foreground">Master Control Panel</p>
+                </div>
+
+                <div class="card">
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold mb-2">Admin Login</h2>
+                            <p class="text-muted-foreground">Sign in to manage the marketplace</p>
+                        </div>
+                        <form id="admin-login-form" class="space-y-4">
+                            <div>
+                                <label for="admin-email" class="block text-sm font-medium mb-2">Email</label>
+                                <input type="email" id="admin-email" class="input" placeholder="admin@spiceshop.com" required>
+                            </div>
+                            <div>
+                                <label for="admin-password" class="block text-sm font-medium mb-2">Password</label>
+                                <input type="password" id="admin-password" class="input" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-full">
+                                🔑 Admin Login
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <header id="admin-header" class="bg-primary text-primary-foreground border-b sticky top-0 z-50 hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold cursor-pointer">Admin Panel</h1>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <button class="btn btn-secondary text-primary" onclick="adminLogout()">
+                            👤 Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="admin-main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 hidden">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold mb-2">Merchant Management</h1>
+                <p class="text-muted-foreground">Approve, deny, and manage all registered merchants.</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tabs-list mb-6">
+                    <button id="tab-active" class="tabs-trigger active" onclick="switchMerchantTab('active')">Active Merchants</button>
+                    <button id="tab-requests" class="tabs-trigger" onclick="switchMerchantTab('requests')">Pending Requests</button>
+                </div>
+
+                <div id="active-merchants-content" class="tabs-content">
+                    <div class="card">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">Active Merchant List (Verified)</h3>
+                            <div class="overflow-x-auto">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Shop Name</th>
+                                            <th>User Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="active-merchants-table-body">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pending-requests-content" class="tabs-content hidden">
+                    <div class="card">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">New Merchant Requests (Pending)</h3>
+                            <div class="overflow-x-auto">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Shop Name</th>
+                                            <th>User Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pending-merchants-table-body">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ADMIN PAGE LOGIC
+        let adminIsAuthenticated = false;
+        
+        // Mock Admin Data (isVerified: true for active, false for pending)
+        let merchants = [
+            { id: 'M-001', shopName: 'Spice King', email: 'spiceking@test.com', phone: '9876543210', isVerified: true },
+            { id: 'M-002', shopName: 'Kerala Spices', email: 'keralaspices@test.com', phone: '9988776655', isVerified: false },
+            { id: 'M-003', shopName: 'Organic Masala', email: 'organicmasala@test.com', phone: '9000123456', isVerified: false },
+            { id: 'M-004', shopName: 'The Chilli Hub', email: 'chilli@test.com', phone: '8000123456', isVerified: true }
+        ];
+
+        function adminLogin() {
+            // In a real app, this would involve API authentication
+            adminIsAuthenticated = true;
+            document.getElementById('admin-login-page').classList.add('hidden');
+            document.getElementById('admin-header').classList.remove('hidden');
+            document.getElementById('admin-main-content').classList.remove('hidden');
+            switchMerchantTab('active'); // Default to showing active merchants
+        }
+
+        function adminLogout() {
+            adminIsAuthenticated = false;
+            document.getElementById('admin-header').classList.add('hidden');
+            document.getElementById('admin-main-content').classList.add('hidden');
+            document.getElementById('admin-login-page').classList.remove('hidden');
+        }
+        
+        function switchMerchantTab(tab) {
+            // Hide all content and remove active class from buttons
+            document.getElementById('active-merchants-content').classList.add('hidden');
+            document.getElementById('pending-requests-content').classList.add('hidden');
+            document.getElementById('tab-active').classList.remove('active');
+            document.getElementById('tab-requests').classList.remove('active');
+
+            // Show selected content and set active class
+            if (tab === 'active') {
+                document.getElementById('active-merchants-content').classList.remove('hidden');
+                document.getElementById('tab-active').classList.add('active');
+                renderMerchantsTable(true);
+            } else if (tab === 'requests') {
+                document.getElementById('pending-requests-content').classList.remove('hidden');
+                document.getElementById('tab-requests').classList.add('active');
+                renderMerchantsTable(false);
+            }
+        }
+
+        function renderMerchantsTable(isActiveTable) {
+            const filteredMerchants = merchants.filter(m => m.isVerified === isActiveTable);
+            const tbodyId = isActiveTable ? 'active-merchants-table-body' : 'pending-merchants-table-body';
+            const tbody = document.getElementById(tbodyId);
+
+            if (filteredMerchants.length === 0) {
+                 tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted-foreground py-4">No ${isActiveTable ? 'active merchants' : 'pending requests'} found.</td></tr>`;
+                 return;
+            }
+
+            tbody.innerHTML = filteredMerchants.map(merchant => {
+                const statusBadge = merchant.isVerified
+                    ? `<span class="badge badge-default">Active</span>`
+                    : `<span class="badge badge-destructive">Pending</span>`;
+                
+                let actionsButtons = '';
+
+                if (isActiveTable) {
+                    // Actions for Active Merchants (Deactivate/Revoke)
+                    actionsButtons = `
+                        <button class="btn btn-sm btn-destructive" 
+                                onclick="toggleVerificationStatus('${merchant.id}', false)">
+                            Deactivate
+                        </button>
+                    `;
+                } else {
+                    // Actions for Pending Requests (Verify/Remove)
+                    actionsButtons = `
+                        <button class="btn btn-sm btn-primary mr-2" 
+                                onclick="toggleVerificationStatus('${merchant.id}', true)">
+                            ✅ Verify
+                        </button>
+                        <button class="btn btn-sm btn-secondary text-destructive" 
+                                onclick="removeMerchantRequest('${merchant.id}')">
+                            ❌ Remove
+                        </button>
+                    `;
+                }
+
+                return `
+                    <tr>
+                        <td>${merchant.shopName}</td>
+                        <td>${merchant.email}</td>
+                        <td>${merchant.phone}</td>
+                        <td>${statusBadge}</td>
+                        <td>${actionsButtons}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function toggleVerificationStatus(id, newStatus) {
+            const merchant = merchants.find(m => m.id === id);
+            if (merchant) {
+                // In a real app: Send PATCH request to /api/admin/merchant/:id/verify
+                merchant.isVerified = newStatus;
+                alert(`${merchant.shopName} is now ${newStatus ? 'Verified (Active)' : 'Deactivated'}`);
+                
+                // Re-render the current active tab
+                const currentTab = newStatus ? 'requests' : 'active';
+                switchMerchantTab(currentTab === 'requests' ? 'requests' : 'active');
+            }
+        }
+        
+        function removeMerchantRequest(id) {
+            if (confirm('Are you sure you want to permanently remove this merchant request?')) {
+                 // In a real app: Send DELETE request to /api/admin/merchant/:id
+                merchants = merchants.filter(m => m.id !== id);
+                alert('Merchant request successfully removed.');
+                switchMerchantTab('requests'); // Re-render pending requests tab
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Basic check for demo (Replace with API call in production)
+                const email = document.getElementById('admin-email').value;
+                const password = document.getElementById('admin-password').value;
+                if (email === 'admin@spiceshop.com' && password === 'admin123') {
+                     adminLogin();
+                } else {
+                     alert('Invalid Admin Credentials (Use admin@spiceshop.com / admin123)');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
